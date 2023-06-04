@@ -25,10 +25,13 @@ public class HardDriveMapper {
     }
 
     public static HardDrive toHardDrive(HardDriveRequest request) {
-        return new HardDrive()
-                .setSerialNumber(request.getSerialNumber())
-                .setManufacturer(request.getManufacturer())
-                .setCapacity(request.getCapacity())
-                .setPrice(request.getPrice());
+        HardDrive hardDrive = new HardDrive();
+        hardDrive.setSerialNumber(request.getSerialNumber());
+        hardDrive.setManufacturer(request.getManufacturer());
+        hardDrive.setCapacity(request.getCapacity());
+        hardDrive.setPrice(request.getPrice());
+        hardDrive.setStockBalance(request.getStockBalance());
+
+        return hardDrive;
     }
 }

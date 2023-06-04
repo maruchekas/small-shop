@@ -1,13 +1,9 @@
 package com.maruchek.smallshop.model.mapper;
 
 import com.maruchek.smallshop.api.request.LaptopRequest;
-import com.maruchek.smallshop.api.request.MonitorRequest;
 import com.maruchek.smallshop.api.response.LaptopResponse;
 import com.maruchek.smallshop.api.response.LaptopShortResponse;
-import com.maruchek.smallshop.api.response.MonitorResponse;
-import com.maruchek.smallshop.api.response.MonitorShortResponse;
 import com.maruchek.smallshop.model.Laptop;
-import com.maruchek.smallshop.model.Monitor;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -25,14 +21,18 @@ public class LaptopMapper {
                 .setSerialNumber(laptop.getSerialNumber())
                 .setManufacturer(laptop.getManufacturer())
                 .setPrice(laptop.getPrice())
-                .setSize(laptop.getSize());
+                .setSize(laptop.getSize())
+                .setStockBalance(laptop.getStockBalance());
     }
 
     public static Laptop toLaptop(LaptopRequest request) {
-        return new Laptop()
-                .setSerialNumber(request.getSerialNumber())
-                .setManufacturer(request.getManufacturer())
-                .setSize(request.getSize())
-                .setPrice(request.getPrice());
+        Laptop laptop = new Laptop();
+        laptop.setSerialNumber(request.getSerialNumber());
+        laptop.setManufacturer(request.getManufacturer());
+        laptop.setSize(request.getSize());
+        laptop.setPrice(request.getPrice());
+        laptop.setStockBalance(request.getStockBalance());
+
+        return laptop;
     }
 }

@@ -21,14 +21,16 @@ public class MonitorMapper {
                 .setSerialNumber(monitor.getSerialNumber())
                 .setManufacturer(monitor.getManufacturer())
                 .setPrice(monitor.getPrice())
-                .setScreenSize(monitor.getScreenSize());
+                .setScreenSize(monitor.getScreenSize())
+                .setStockBalance(monitor.getStockBalance());
     }
 
     public static Monitor toMonitor(MonitorRequest request) {
-        return new Monitor()
-                .setSerialNumber(request.getSerialNumber())
-                .setManufacturer(request.getManufacturer())
-                .setScreenSize(request.getScreenSize())
-                .setPrice(request.getPrice());
+        Monitor monitor = new Monitor();
+        monitor.setSerialNumber(request.getSerialNumber());
+        monitor.setManufacturer(request.getManufacturer());
+        monitor.setScreenSize(request.getScreenSize());
+        monitor.setPrice(request.getPrice());
+        return monitor;
     }
 }

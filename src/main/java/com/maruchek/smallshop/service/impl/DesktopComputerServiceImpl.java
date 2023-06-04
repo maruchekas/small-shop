@@ -24,10 +24,8 @@ public class DesktopComputerServiceImpl implements DesktopComputerService {
 
     @Override
     public DesktopComputerResponse getById(long id) {
-        final long balance = computerRepository.count();
         DesktopComputer computer = checkEndGetComputer(id);
-        return DesktopPcMapper.toFullResponse(computer)
-                .setStockBalance(balance);
+        return DesktopPcMapper.toFullResponse(computer);
     }
 
     @Override
@@ -48,10 +46,11 @@ public class DesktopComputerServiceImpl implements DesktopComputerService {
     public DesktopComputerResponse updateComputer(long id, DesktopComputerRequest request) {
         DesktopComputer computer = checkEndGetComputer(id);
 
-        computer.setPrice(request.getPrice())
-                .setSerialNumber(request.getSerialNumber())
-                .setManufacturer(request.getManufacturer())
-                .setFormFactor(FormFactor.valueOf(request.getFormFactor()));
+        computer.setPrice(request.getPrice());
+        computer.setSerialNumber(request.getSerialNumber());
+        computer.setManufacturer(request.getManufacturer());
+        computer.setFormFactor(FormFactor.valueOf(request.getFormFactor()));
+        computer.setStockBalance(request.getStockBalance());
 
         computerRepository.save(computer);
 
@@ -64,14 +63,7 @@ public class DesktopComputerServiceImpl implements DesktopComputerService {
     }
 
     private DesktopComputer getNewComputer(DesktopComputerRequest request) {
-        long balance = computerRepository.count();
-        DesktopComputer computer = new DesktopComputer();
-        computer.setPrice(request.getPrice());
-        computer.setManufacturer(request.getManufacturer());
-        computer.setSerialNumber(request.getSerialNumber());
-        computer.setFormFactor(FormFactor.valueOf(request.getFormFactor()));
-        computer.setStockBalance(++balance);
 
-        return computer;
+        return DesktopPcMapper.toDesktopPc(request);
     }
 }

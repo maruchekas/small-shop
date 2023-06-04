@@ -23,10 +23,8 @@ public class MonitorServiceImpl implements MonitorService {
 
     @Override
     public MonitorResponse getById(long id) {
-        final long balance = monitorRepository.count();
         Monitor monitor = checkEndGetMonitor(id);
-        return MonitorMapper.toFullResponse(monitor)
-                .setStockBalance(balance);
+        return MonitorMapper.toFullResponse(monitor);
     }
 
     @Override
@@ -47,10 +45,10 @@ public class MonitorServiceImpl implements MonitorService {
     public MonitorResponse updateMonitor(long id, MonitorRequest request) {
         Monitor monitor = checkEndGetMonitor(id);
 
-        monitor.setPrice(request.getPrice())
-                .setSerialNumber(request.getSerialNumber())
-                .setManufacturer(request.getManufacturer())
-                .setScreenSize(request.getScreenSize());
+        monitor.setPrice(request.getPrice());
+        monitor.setSerialNumber(request.getSerialNumber());
+        monitor.setManufacturer(request.getManufacturer());
+        monitor.setScreenSize(request.getScreenSize());
 
         monitorRepository.save(monitor);
 
@@ -63,13 +61,12 @@ public class MonitorServiceImpl implements MonitorService {
     }
 
     private Monitor getNewMonitor(MonitorRequest request) {
-        long balance = monitorRepository.count();
         Monitor monitor = new Monitor();
         monitor.setPrice(request.getPrice());
         monitor.setManufacturer(request.getManufacturer());
         monitor.setSerialNumber(request.getSerialNumber());
-        monitor.setScreenSize(monitor.getScreenSize());
-        monitor.setStockBalance(++balance);
+        monitor.setScreenSize(request.getScreenSize());
+        monitor.setStockBalance(request.getStockBalance());
 
         return monitor;
     }

@@ -23,10 +23,8 @@ public class LaptopServiceImpl implements LaptopService {
 
     @Override
     public LaptopResponse getById(long id) {
-        final long balance = laptopRepository.count();
         Laptop laptop = checkEndGetLaptop(id);
-        return LaptopMapper.toFullResponse(laptop)
-                .setStockBalance(balance);
+        return LaptopMapper.toFullResponse(laptop);
     }
 
     @Override
@@ -47,10 +45,10 @@ public class LaptopServiceImpl implements LaptopService {
     public LaptopResponse updateLaptop(long id, LaptopRequest request) {
         Laptop laptop = checkEndGetLaptop(id);
 
-        laptop.setPrice(request.getPrice())
-                .setSerialNumber(request.getSerialNumber())
-                .setManufacturer(request.getManufacturer())
-                .setSize(request.getSize());
+        laptop.setPrice(request.getPrice());
+        laptop.setSerialNumber(request.getSerialNumber());
+        laptop.setManufacturer(request.getManufacturer());
+        laptop.setSize(request.getSize());
 
         laptopRepository.save(laptop);
 
@@ -63,14 +61,7 @@ public class LaptopServiceImpl implements LaptopService {
     }
 
     private Laptop getNewLaptop(LaptopRequest request) {
-        long balance = laptopRepository.count();
-        Laptop laptop = new Laptop();
-        laptop.setPrice(request.getPrice());
-        laptop.setManufacturer(request.getManufacturer());
-        laptop.setSerialNumber(request.getSerialNumber());
-        laptop.setSize(laptop.getSize());
-        laptop.setStockBalance(++balance);
 
-        return laptop;
+        return LaptopMapper.toLaptop(request);
     }
 }

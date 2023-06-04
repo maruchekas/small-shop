@@ -12,25 +12,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(name = "laptops")
-public class Laptop {
-
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(name = "serial_number")
-    private String serialNumber;
-
-    @Column(name = "manufacturer")
-    private String manufacturer;
-
-    @Column(name = "price")
-    private double price;
-
-    @Column(name = "stock_balance")
-    private long stockBalance;
+public class Laptop extends BaseEntity{
 
     @Column(name = "size")
     private int size;

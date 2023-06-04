@@ -26,10 +26,13 @@ public class DesktopPcMapper {
     }
 
     public static DesktopComputer toDesktopPc(DesktopComputerRequest request) {
-        return new DesktopComputer()
-                .setSerialNumber(request.getSerialNumber())
-                .setManufacturer(request.getManufacturer())
-                .setFormFactor(FormFactor.valueOf(request.getFormFactor()))
-                .setPrice(request.getPrice());
+        DesktopComputer computer = new DesktopComputer();
+        computer.setSerialNumber(request.getSerialNumber());
+        computer.setManufacturer(request.getManufacturer());
+        computer.setFormFactor(FormFactor.valueOf(request.getFormFactor()));
+        computer.setPrice(request.getPrice());
+        computer.setStockBalance(request.getStockBalance());
+
+        return computer;
     }
 }

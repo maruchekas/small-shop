@@ -23,10 +23,8 @@ public class HardDriveServiceImpl implements HardDriveService {
 
     @Override
     public HardDriveResponse getById(long id) {
-        final long balance = hardDriveRepository.count();
         HardDrive hardDrive = checkEndGetHardDrive(id);
-        return HardDriveMapper.toFullResponse(hardDrive)
-                .setStockBalance(balance);
+        return HardDriveMapper.toFullResponse(hardDrive);
     }
 
     @Override
@@ -47,10 +45,11 @@ public class HardDriveServiceImpl implements HardDriveService {
     public HardDriveResponse updateHardDrive(long id, HardDriveRequest request) {
         HardDrive hardDrive = checkEndGetHardDrive(id);
 
-        hardDrive.setPrice(request.getPrice())
-                .setSerialNumber(request.getSerialNumber())
-                .setManufacturer(request.getManufacturer())
-                .setCapacity(request.getCapacity());
+        hardDrive.setPrice(request.getPrice());
+        hardDrive.setSerialNumber(request.getSerialNumber());
+        hardDrive.setManufacturer(request.getManufacturer());
+        hardDrive.setCapacity(request.getCapacity());
+        hardDrive.setStockBalance(request.getStockBalance());
 
         hardDriveRepository.save(hardDrive);
 
@@ -64,14 +63,6 @@ public class HardDriveServiceImpl implements HardDriveService {
     }
 
     private HardDrive getNewHardDrive(HardDriveRequest request) {
-        long balance = hardDriveRepository.count();
-        HardDrive hardDrive = new HardDrive();
-        hardDrive.setPrice(request.getPrice());
-        hardDrive.setManufacturer(request.getManufacturer());
-        hardDrive.setSerialNumber(request.getSerialNumber());
-        hardDrive.setCapacity(hardDrive.getCapacity());
-        hardDrive.setStockBalance(++balance);
-
-        return hardDrive;
+        return HardDriveMapper.toHardDrive(request);
     }
 }
