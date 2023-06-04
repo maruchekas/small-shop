@@ -49,6 +49,7 @@ public class LaptopServiceImpl implements LaptopService {
         laptop.setSerialNumber(request.getSerialNumber());
         laptop.setManufacturer(request.getManufacturer());
         laptop.setSize(request.getSize());
+        laptop.setStockBalance(request.getStockBalance());
 
         laptopRepository.save(laptop);
 

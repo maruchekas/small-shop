@@ -49,6 +49,7 @@ public class MonitorServiceImpl implements MonitorService {
         monitor.setSerialNumber(request.getSerialNumber());
         monitor.setManufacturer(request.getManufacturer());
         monitor.setScreenSize(request.getScreenSize());
+        monitor.setStockBalance(request.getStockBalance());
 
         monitorRepository.save(monitor);
 

@@ -21,7 +21,8 @@ public class HardDriveMapper {
                 .setSerialNumber(hardDrive.getSerialNumber())
                 .setManufacturer(hardDrive.getManufacturer())
                 .setPrice(hardDrive.getPrice())
-                .setCapacity(hardDrive.getCapacity());
+                .setCapacity(hardDrive.getCapacity())
+                .setStockBalance(hardDrive.getStockBalance());
     }
 
     public static HardDrive toHardDrive(HardDriveRequest request) {

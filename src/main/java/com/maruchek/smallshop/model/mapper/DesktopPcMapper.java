@@ -22,7 +22,8 @@ public class DesktopPcMapper {
                 .setSerialNumber(computer.getSerialNumber())
                 .setManufacturer(computer.getManufacturer())
                 .setPrice(computer.getPrice())
-                .setFormFactor(computer.getFormFactor());
+                .setFormFactor(computer.getFormFactor())
+                .setStockBalance(computer.getStockBalance());
     }
 
     public static DesktopComputer toDesktopPc(DesktopComputerRequest request) {
