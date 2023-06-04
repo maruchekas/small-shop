@@ -21,7 +21,7 @@ public class Monitor {
     private long id;
 
     @Column(name = "serial_number")
-    private int serialNumber;
+    private String serialNumber;
 
     @Column(name = "manufacturer")
     private String manufacturer;
@@ -30,8 +30,8 @@ public class Monitor {
     private double price;
 
     @Column(name = "stock_balance")
-    private int stockBalance;
+    private long stockBalance;
 
     @Column(name = "screen_size")
-    private double screen_size;
+    private double screenSize;
 }

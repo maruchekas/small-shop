@@ -33,13 +33,13 @@ public class DesktopComputerController {
             @ArraySchema(schema = @Schema(implementation = DesktopPcShortResponse.class))))
     )
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<DesktopPcShortResponse> departments() {
+    public List<DesktopPcShortResponse> getComputers() {
         return computerService.getAll();
     }
 
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public DesktopComputerResponse person(@PathVariable Long id) {
+    public DesktopComputerResponse getComputer(@PathVariable Long id) {
         return computerService.getById(id);
     }
 
