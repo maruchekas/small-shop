@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-public class LaptopControllerTest extends AbstractTest {
+public class MonitorControllerTest extends AbstractTest {
 
     @Autowired
     private MockMvc mockMvc;
