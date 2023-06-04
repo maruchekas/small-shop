@@ -1,10 +1,11 @@
 package com.maruchek.smallshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import javax.persistence.*;
 
 @Setter
 @Getter
@@ -12,7 +13,7 @@ import lombok.experimental.Accessors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "monitors")
-public class Monitor {
+public class HardDrive {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -31,6 +32,6 @@ public class Monitor {
     @Column(name = "stock_balance")
     private int stockBalance;
 
-    @Column(name = "screen_size")
-    private int screen_size;
+    @Column(name = "capacity")
+    private int capacity;
 }

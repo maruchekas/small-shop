@@ -1,19 +1,19 @@
 package com.maruchek.smallshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.maruchek.smallshop.enums.FormFactor;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import javax.persistence.*;
 
 @Setter
 @Getter
 @Accessors(chain = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(name = "desktop_computer")
-public class Laptop {
+@Table(name = "monitors")
+public class Monitor {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -32,6 +32,6 @@ public class Laptop {
     @Column(name = "stock_balance")
     private int stockBalance;
 
-    @Column(name = "size")
-    private int size;
+    @Column(name = "screen_size")
+    private double screen_size;
 }

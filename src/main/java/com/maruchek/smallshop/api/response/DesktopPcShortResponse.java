@@ -6,12 +6,10 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class DesktopComputerResponse {
+public class DesktopPcShortResponse {
 
-    long id;
     private String manufacturer;
     private double price;
     private FormFactor formFactor;
-    private long stockBalance;
 
 }

@@ -1,0 +1,18 @@
+server:
+  port: 8085
+  application:
+    name: small-shop
+
+### For DB ###
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:h2db
+    username: sa
+
+  jpa:
+    open-in-view: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: 'create-drop'
+
