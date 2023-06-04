@@ -22,7 +22,7 @@ public class DesktopComputer{
     private long id;
 
     @Column(name = "serial_number")
-    private int serialNumber;
+    private String serialNumber;
 
     @Column(name = "manufacturer")
     private String manufacturer;

@@ -3,6 +3,7 @@ package com.maruchek.smallshop.model.mapper;
 import com.maruchek.smallshop.api.request.DesktopComputerRequest;
 import com.maruchek.smallshop.api.response.DesktopComputerResponse;
 import com.maruchek.smallshop.api.response.DesktopPcShortResponse;
+import com.maruchek.smallshop.enums.FormFactor;
 import com.maruchek.smallshop.model.DesktopComputer;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ public class DesktopPcMapper {
     public static DesktopComputerResponse toFullResponse(DesktopComputer computer) {
         return new DesktopComputerResponse()
                 .setId(computer.getId())
+                .setSerialNumber(computer.getSerialNumber())
                 .setManufacturer(computer.getManufacturer())
                 .setPrice(computer.getPrice())
                 .setFormFactor(computer.getFormFactor());
@@ -27,7 +29,7 @@ public class DesktopPcMapper {
         return new DesktopComputer()
                 .setSerialNumber(request.getSerialNumber())
                 .setManufacturer(request.getManufacturer())
-                .setFormFactor(request.getFormFactor())
+                .setFormFactor(FormFactor.valueOf(request.getFormFactor()))
                 .setPrice(request.getPrice());
     }
 }

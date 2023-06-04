@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 public class DesktopComputerResponse {
 
     long id;
+    private String serialNumber;
     private String manufacturer;
     private double price;
     private FormFactor formFactor;

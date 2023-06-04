@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Data
 public abstract class BaseEntity implements Serializable {
 
-    private int serialNumber;
+    private String serialNumber;
     private String manufacturer;
     private double price;
     private long stockBalance;

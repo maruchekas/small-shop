@@ -3,6 +3,7 @@ package com.maruchek.smallshop.service.impl;
 import com.maruchek.smallshop.api.request.DesktopComputerRequest;
 import com.maruchek.smallshop.api.response.DesktopComputerResponse;
 import com.maruchek.smallshop.api.response.DesktopPcShortResponse;
+import com.maruchek.smallshop.enums.FormFactor;
 import com.maruchek.smallshop.repository.DesktopComputerRepository;
 import com.maruchek.smallshop.model.DesktopComputer;
 import com.maruchek.smallshop.model.mapper.DesktopPcMapper;
@@ -23,9 +24,10 @@ public class DesktopComputerServiceImpl implements DesktopComputerService {
 
     @Override
     public DesktopComputerResponse getById(long id) {
-        DesktopComputer computer = computerRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-        return DesktopPcMapper.toFullResponse(computer);
+        final long balance = computerRepository.count();
+        DesktopComputer computer = checkEndGetComputer(id);
+        return DesktopPcMapper.toFullResponse(computer)
+                .setStockBalance(balance);
     }
 
     @Override
@@ -44,17 +46,21 @@ public class DesktopComputerServiceImpl implements DesktopComputerService {
 
     @Override
     public DesktopComputerResponse updateComputer(long id, DesktopComputerRequest request) {
-        DesktopComputer computer = computerRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+        DesktopComputer computer = checkEndGetComputer(id);
 
         computer.setPrice(request.getPrice())
                 .setSerialNumber(request.getSerialNumber())
                 .setManufacturer(request.getManufacturer())
-                .setFormFactor(request.getFormFactor());
+                .setFormFactor(FormFactor.valueOf(request.getFormFactor()));
 
         computerRepository.save(computer);
 
         return DesktopPcMapper.toFullResponse(computer);
+    }
+
+    private DesktopComputer checkEndGetComputer(long id) {
+        return computerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Computer with id %s not found", id)));
     }
 
     private DesktopComputer getNewComputer(DesktopComputerRequest request) {
@@ -63,7 +69,7 @@ public class DesktopComputerServiceImpl implements DesktopComputerService {
         computer.setPrice(request.getPrice());
         computer.setManufacturer(request.getManufacturer());
         computer.setSerialNumber(request.getSerialNumber());
-        computer.setFormFactor(request.getFormFactor());
+        computer.setFormFactor(FormFactor.valueOf(request.getFormFactor()));
         computer.setStockBalance(++balance);
 
         return computer;
