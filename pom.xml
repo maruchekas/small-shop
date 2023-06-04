@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.maruchek</groupId>
     <artifactId>small-shop</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>small-shop</name>
     <description>small-shop</description>
     <properties>
