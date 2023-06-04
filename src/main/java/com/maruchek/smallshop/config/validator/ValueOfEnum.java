@@ -1,4 +1,4 @@
-package com.maruchek.smallshop.validator;
+package com.maruchek.smallshop.config.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

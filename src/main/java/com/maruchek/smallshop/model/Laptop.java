@@ -21,7 +21,7 @@ public class Laptop {
     private long id;
 
     @Column(name = "serial_number")
-    private int serialNumber;
+    private String serialNumber;
 
     @Column(name = "manufacturer")
     private String manufacturer;
@@ -30,7 +30,7 @@ public class Laptop {
     private double price;
 
     @Column(name = "stock_balance")
-    private int stockBalance;
+    private long stockBalance;
 
     @Column(name = "size")
     private int size;

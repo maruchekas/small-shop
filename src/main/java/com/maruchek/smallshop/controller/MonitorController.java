@@ -1,6 +1,8 @@
 package com.maruchek.smallshop.controller;
 
+import com.maruchek.smallshop.api.request.LaptopRequest;
 import com.maruchek.smallshop.api.request.MonitorRequest;
+import com.maruchek.smallshop.api.response.ErrorResponse;
 import com.maruchek.smallshop.api.response.MonitorResponse;
 import com.maruchek.smallshop.api.response.MonitorShortResponse;
 import com.maruchek.smallshop.api.response.ValidationErrorResponse;
@@ -38,6 +40,15 @@ public class MonitorController {
     }
 
 
+    @Operation(
+            summary = "Get monitor by id",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Monitor is found",
+                            content = @Content(schema = @Schema(implementation = MonitorRequest.class))),
+                    @ApiResponse(responseCode = "404", description = "Monitor not found",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            }
+    )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MonitorResponse getMonitor(@PathVariable Long id) {
         return monitorService.getById(id);

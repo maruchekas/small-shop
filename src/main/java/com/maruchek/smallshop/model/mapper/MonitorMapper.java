@@ -24,7 +24,7 @@ public class MonitorMapper {
                 .setScreenSize(monitor.getScreenSize());
     }
 
-    public static Monitor toDesktopPc(MonitorRequest request) {
+    public static Monitor toMonitor(MonitorRequest request) {
         return new Monitor()
                 .setSerialNumber(request.getSerialNumber())
                 .setManufacturer(request.getManufacturer())

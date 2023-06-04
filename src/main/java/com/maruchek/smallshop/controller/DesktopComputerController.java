@@ -1,8 +1,10 @@
 package com.maruchek.smallshop.controller;
 
 import com.maruchek.smallshop.api.request.DesktopComputerRequest;
+import com.maruchek.smallshop.api.request.LaptopRequest;
 import com.maruchek.smallshop.api.response.DesktopComputerResponse;
 import com.maruchek.smallshop.api.response.DesktopPcShortResponse;
+import com.maruchek.smallshop.api.response.ErrorResponse;
 import com.maruchek.smallshop.api.response.ValidationErrorResponse;
 import com.maruchek.smallshop.service.DesktopComputerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +39,15 @@ public class DesktopComputerController {
         return computerService.getAll();
     }
 
-
+    @Operation(
+            summary = "Get computer by id",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Computer is found",
+                            content = @Content(schema = @Schema(implementation = DesktopComputerRequest.class))),
+                    @ApiResponse(responseCode = "404", description = "Computer not found",
+                            content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            }
+    )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public DesktopComputerResponse getComputer(@PathVariable Long id) {
         return computerService.getById(id);

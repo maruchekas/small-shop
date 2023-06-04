@@ -1,15 +1,9 @@
 package com.maruchek.smallshop.service.impl;
 
-import com.maruchek.smallshop.api.request.DesktopComputerRequest;
 import com.maruchek.smallshop.api.request.MonitorRequest;
-import com.maruchek.smallshop.api.response.DesktopComputerResponse;
-import com.maruchek.smallshop.api.response.DesktopPcShortResponse;
 import com.maruchek.smallshop.api.response.MonitorResponse;
 import com.maruchek.smallshop.api.response.MonitorShortResponse;
-import com.maruchek.smallshop.enums.FormFactor;
-import com.maruchek.smallshop.model.DesktopComputer;
 import com.maruchek.smallshop.model.Monitor;
-import com.maruchek.smallshop.model.mapper.DesktopPcMapper;
 import com.maruchek.smallshop.model.mapper.Mapper;
 import com.maruchek.smallshop.model.mapper.MonitorMapper;
 import com.maruchek.smallshop.repository.MonitorRepository;
