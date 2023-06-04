@@ -1,0 +1,77 @@
+package com.maruchek.smallshop.service.impl;
+
+import com.maruchek.smallshop.api.request.HardDriveRequest;
+import com.maruchek.smallshop.api.response.HardDriveResponse;
+import com.maruchek.smallshop.api.response.HardDriveShortResponse;
+import com.maruchek.smallshop.model.HardDrive;
+import com.maruchek.smallshop.model.mapper.HardDriveMapper;
+import com.maruchek.smallshop.model.mapper.Mapper;
+import com.maruchek.smallshop.repository.HardDriveRepository;
+import com.maruchek.smallshop.service.HardDriveService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class HardDriveServiceImpl implements HardDriveService {
+
+    private final HardDriveRepository hardDriveRepository;
+
+
+    @Override
+    public HardDriveResponse getById(long id) {
+        final long balance = hardDriveRepository.count();
+        HardDrive hardDrive = checkEndGetHardDrive(id);
+        return HardDriveMapper.toFullResponse(hardDrive)
+                .setStockBalance(balance);
+    }
+
+    @Override
+    public List<HardDriveShortResponse> getAll() {
+        List<HardDrive> hardDrives = hardDriveRepository.findAll();
+        return Mapper.convertList(hardDrives, HardDriveMapper::toShortResponse);
+    }
+
+    @Override
+    public HardDriveResponse addHardDrive(HardDriveRequest request) {
+        HardDrive hardDrive = getNewHardDrive(request);
+
+        hardDriveRepository.save(hardDrive);
+        return HardDriveMapper.toFullResponse(hardDrive);
+    }
+
+    @Override
+    public HardDriveResponse updateHardDrive(long id, HardDriveRequest request) {
+        HardDrive hardDrive = checkEndGetHardDrive(id);
+
+        hardDrive.setPrice(request.getPrice())
+                .setSerialNumber(request.getSerialNumber())
+                .setManufacturer(request.getManufacturer())
+                .setCapacity(request.getCapacity());
+
+        hardDriveRepository.save(hardDrive);
+
+        return HardDriveMapper.toFullResponse(hardDrive);
+    }
+
+    private HardDrive checkEndGetHardDrive(long id) {
+        return hardDriveRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("HDD with id %s not found",
+                        id)));
+    }
+
+    private HardDrive getNewHardDrive(HardDriveRequest request) {
+        long balance = hardDriveRepository.count();
+        HardDrive hardDrive = new HardDrive();
+        hardDrive.setPrice(request.getPrice());
+        hardDrive.setManufacturer(request.getManufacturer());
+        hardDrive.setSerialNumber(request.getSerialNumber());
+        hardDrive.setCapacity(hardDrive.getCapacity());
+        hardDrive.setStockBalance(++balance);
+
+        return hardDrive;
+    }
+}

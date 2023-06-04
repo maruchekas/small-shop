@@ -5,13 +5,13 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class LaptopResponse {
+public class HardDriveResponse {
 
     long id;
     private String serialNumber;
     private String manufacturer;
     private double price;
-    private double size;
+    private int capacity;
     private long stockBalance;
 
 }
