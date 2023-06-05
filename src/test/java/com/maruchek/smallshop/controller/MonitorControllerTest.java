@@ -1,11 +1,16 @@
 package com.maruchek.smallshop.controller;
 
 import com.maruchek.smallshop.AbstractTest;
-import com.maruchek.smallshop.api.request.LaptopRequest;
-import com.maruchek.smallshop.service.LaptopService;
+import com.maruchek.smallshop.api.request.MonitorRequest;
+import com.maruchek.smallshop.repository.BaseEntityRepository;
+import com.maruchek.smallshop.repository.MonitorRepository;
+import com.maruchek.smallshop.service.MonitorService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -15,44 +20,58 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 public class MonitorControllerTest extends AbstractTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private LaptopService laptopService;
+    private MonitorService monitorService;
 
-    private LaptopRequest laptop1;
-    private LaptopRequest laptop2;
+    @Autowired
+    private BaseEntityRepository baseRepository;
+
+    @Autowired
+    private MonitorRepository monitorRepository;
+
+    private MonitorRequest monitor1;
+    private MonitorRequest monitor2;
 
     @BeforeEach
     public void setup() {
 
-        laptop1 = new LaptopRequest();
-        laptop1.setSize(16);
-        laptop1.setManufacturer("Manufacturer1");
-        laptop1.setSerialNumber("SerialN1");
-        laptop1.setPrice(1000);
-        laptop1.setStockBalance(10);
+        monitor1 = new MonitorRequest();
+        monitor1.setScreenSize(27);
+        monitor1.setManufacturer("Manufacturer1");
+        monitor1.setSerialNumber("SerialN1");
+        monitor1.setPrice(500);
+        monitor1.setStockBalance(10);
 
-        laptop2 = new LaptopRequest();
-        laptop2.setSize(13);
-        laptop2.setManufacturer("Manufacturer2");
-        laptop2.setSerialNumber("SerialN2");
-        laptop2.setPrice(1000);
-        laptop2.setStockBalance(20);
+        monitor2 = new MonitorRequest();
+        monitor2.setScreenSize(32);
+        monitor2.setManufacturer("Manufacturer2");
+        monitor2.setSerialNumber("SerialN2");
+        monitor2.setPrice(500);
+        monitor2.setStockBalance(20);
 
-        laptopService.addLaptop(laptop1);
-        laptopService.addLaptop(laptop2);
+        monitorService.addMonitor(monitor1);
+        monitorService.addMonitor(monitor2);
 
+    }
+
+    @AfterEach
+    public void clean() {
+        baseRepository.deleteAll();
+        monitorRepository.deleteAll();
     }
 
     @Test
     void getAll() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/laptop")
+                        .get("/api/v1/monitor")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
@@ -63,34 +82,34 @@ public class MonitorControllerTest extends AbstractTest {
 
     @Test
     void getById() throws Exception {
-        long id = 2;
+        long id = monitorRepository.findAll().get(0).getId();
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/laptop/{id}", id)
+                        .get("/api/v1/monitor/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
-                        .value("Manufacturer2"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(1000))
+                        .value("Manufacturer1"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(500))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
-    void createLaptop() throws Exception {
+    void createMonitor() throws Exception {
 
-        LaptopRequest laptop = new LaptopRequest();
-        laptop.setSize(15);
-        laptop.setManufacturer("Manufacturer");
-        laptop.setSerialNumber("SerialN1");
-        laptop.setPrice(1500);
-        laptop.setStockBalance(15);
+        MonitorRequest monitor = new MonitorRequest();
+        monitor.setScreenSize(27);
+        monitor.setManufacturer("Manufacturer");
+        monitor.setSerialNumber("SerialN1");
+        monitor.setPrice(1500);
+        monitor.setStockBalance(15);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/v1/laptop")
+                        .post("/api/v1/monitor")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(laptop))
+                        .content(mapper.writeValueAsString(monitor))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
                         .value("Manufacturer"))
@@ -99,24 +118,25 @@ public class MonitorControllerTest extends AbstractTest {
     }
 
     @Test
-    void updateLaptop() throws Exception {
-        long id = 1;
+    void updateMonitor() throws Exception {
+        long id = monitorRepository.findAll().get(0).getId();
 
-        LaptopRequest laptop = new LaptopRequest();
-        laptop.setSize(15);
-        laptop.setManufacturer("Manufacturer");
-        laptop.setSerialNumber("SerialN1");
-        laptop.setPrice(1500);
-        laptop.setStockBalance(15);
+        MonitorRequest monitor = new MonitorRequest();
+        monitor.setScreenSize(24);
+        monitor.setManufacturer("Manufacturer");
+        monitor.setSerialNumber("SerialN1");
+        monitor.setPrice(1500);
+        monitor.setStockBalance(15);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/api/v1/laptop/{id}", id)
+                        .put("/api/v1/monitor/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(laptop))
+                        .content(mapper.writeValueAsString(monitor))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
                         .value("Manufacturer"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(1500))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.screenSize").value(24))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }

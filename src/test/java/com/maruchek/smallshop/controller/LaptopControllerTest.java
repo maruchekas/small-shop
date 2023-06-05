@@ -2,10 +2,16 @@ package com.maruchek.smallshop.controller;
 
 import com.maruchek.smallshop.AbstractTest;
 import com.maruchek.smallshop.api.request.LaptopRequest;
+import com.maruchek.smallshop.repository.BaseEntityRepository;
+import com.maruchek.smallshop.repository.HardDriveRepository;
+import com.maruchek.smallshop.repository.LaptopRepository;
 import com.maruchek.smallshop.service.LaptopService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -15,6 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 public class LaptopControllerTest extends AbstractTest {
 
     @Autowired
@@ -22,6 +30,12 @@ public class LaptopControllerTest extends AbstractTest {
 
     @Autowired
     private LaptopService laptopService;
+
+    @Autowired
+    private LaptopRepository laptopRepository;
+
+    @Autowired
+    private BaseEntityRepository baseRepository;
 
     private LaptopRequest laptop1;
     private LaptopRequest laptop2;
@@ -48,6 +62,12 @@ public class LaptopControllerTest extends AbstractTest {
 
     }
 
+    @AfterEach
+    public void clean() {
+        baseRepository.deleteAll();
+        laptopRepository.deleteAll();
+    }
+
     @Test
     void getAll() throws Exception {
 
@@ -63,7 +83,7 @@ public class LaptopControllerTest extends AbstractTest {
 
     @Test
     void getById() throws Exception {
-        long id = 2;
+        long id = laptopRepository.findAll().get(0).getId();
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/laptop/{id}", id)
@@ -71,7 +91,7 @@ public class LaptopControllerTest extends AbstractTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
-                        .value("Manufacturer2"))
+                        .value("Manufacturer1"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(1000))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -100,7 +120,7 @@ public class LaptopControllerTest extends AbstractTest {
 
     @Test
     void updateLaptop() throws Exception {
-        long id = 1;
+        long id = laptopRepository.findAll().get(0).getId();
 
         LaptopRequest laptop = new LaptopRequest();
         laptop.setSize(15);

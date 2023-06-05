@@ -1,18 +1,21 @@
 package com.maruchek.smallshop.controller;
 
 import com.maruchek.smallshop.AbstractTest;
-import com.maruchek.smallshop.api.request.HardDriveRequest;
+import com.maruchek.smallshop.api.request.DesktopComputerRequest;
+import com.maruchek.smallshop.enums.FormFactor;
 import com.maruchek.smallshop.repository.BaseEntityRepository;
-import com.maruchek.smallshop.repository.HardDriveRepository;
-import com.maruchek.smallshop.repository.MonitorRepository;
-import com.maruchek.smallshop.service.HardDriveService;
+import com.maruchek.smallshop.repository.DesktopComputerRepository;
+import com.maruchek.smallshop.service.DesktopComputerService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -23,56 +26,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class HardDriveControllerTest extends AbstractTest {
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+public class DesktopComputerControllerTest extends AbstractTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private HardDriveService hardDriveService;
+    private DesktopComputerService computerService;
 
     @Autowired
-    private BaseEntityRepository baseRepository;
+    DesktopComputerRepository computerRepository;
 
     @Autowired
-    private HardDriveRepository hardDriveRepository;
+    BaseEntityRepository baseRepository;
 
-    private HardDriveRequest hardDrive1;
-    private HardDriveRequest hardDrive2;
+    private DesktopComputerRequest computer1;
+    private DesktopComputerRequest computer2;
 
     @BeforeEach
     public void setup() {
 
-        hardDrive1 = new HardDriveRequest();
-        hardDrive1.setCapacity(1000);
-        hardDrive1.setManufacturer("Manufacturer1");
-        hardDrive1.setSerialNumber("SerialN1");
-        hardDrive1.setPrice(300);
-        hardDrive1.setStockBalance(10);
+        computer1 = new DesktopComputerRequest();
+        computer1.setFormFactor(FormFactor.DESKTOP.getValue());
+        computer1.setManufacturer("Manufacturer1");
+        computer1.setSerialNumber("SerialN1");
+        computer1.setPrice(500);
+        computer1.setStockBalance(10);
 
-        hardDrive2 = new HardDriveRequest();
-        hardDrive2.setCapacity(1000);
-        hardDrive2.setManufacturer("Manufacturer2");
-        hardDrive2.setSerialNumber("SerialN2");
-        hardDrive2.setPrice(300);
-        hardDrive2.setStockBalance(20);
+        computer2 = new DesktopComputerRequest();
+        computer2.setFormFactor(FormFactor.MONO_BLOCK.getValue());
+        computer2.setManufacturer("Manufacturer2");
+        computer2.setSerialNumber("SerialN2");
+        computer2.setPrice(500);
+        computer2.setStockBalance(20);
 
-        hardDriveService.addHardDrive(hardDrive1);
-        hardDriveService.addHardDrive(hardDrive2);
+        computerService.addComputer(computer1);
+        computerService.addComputer(computer2);
 
     }
 
     @AfterEach
     public void clean() {
         baseRepository.deleteAll();
-        hardDriveRepository.deleteAll();
+        computerRepository.deleteAll();
     }
 
     @Test
     void getAll() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/hdd")
+                        .get("/api/v1/desktop-pc")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
@@ -83,61 +87,61 @@ public class HardDriveControllerTest extends AbstractTest {
 
     @Test
     void getById() throws Exception {
-        long id = hardDriveRepository.findAll().get(0).getId();
+        long id = computerRepository.findAll().get(0).getId();
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/v1/hdd/{id}", id)
+                        .get("/api/v1/desktop-pc/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
                         .value("Manufacturer1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(300))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    void createHardDrive() throws Exception {
-
-        HardDriveRequest hardDrive = new HardDriveRequest();
-        hardDrive.setCapacity(1000);
-        hardDrive.setManufacturer("Manufacturer");
-        hardDrive.setSerialNumber("SerialN1");
-        hardDrive.setPrice(1500);
-        hardDrive.setStockBalance(15);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/v1/hdd")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(hardDrive))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
-                        .value("Manufacturer"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    void updateHardDrive() throws Exception {
-        long id = hardDriveRepository.findAll().get(0).getId();
-
-        HardDriveRequest hardDrive = new HardDriveRequest();
-        hardDrive.setCapacity(1500);
-        hardDrive.setManufacturer("Manufacturer");
-        hardDrive.setSerialNumber("SerialN1");
-        hardDrive.setPrice(500);
-        hardDrive.setStockBalance(15);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .put("/api/v1/hdd/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(hardDrive))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
-                        .value("Manufacturer"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(500))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.capacity").value(1500))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void createDesktopComputer() throws Exception {
+
+        DesktopComputerRequest computer = new DesktopComputerRequest();
+        computer.setFormFactor(FormFactor.DESKTOP.getValue());
+        computer.setManufacturer("Manufacturer");
+        computer.setSerialNumber("SerialN1");
+        computer.setPrice(1500);
+        computer.setStockBalance(15);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/v1/desktop-pc")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(computer))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
+                        .value("Manufacturer"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void updateDesktopComputer() throws Exception {
+        long id = computerRepository.findAll().get(0).getId();
+
+        DesktopComputerRequest computer = new DesktopComputerRequest();
+        computer.setFormFactor(FormFactor.DESKTOP.getValue());
+        computer.setManufacturer("Manufacturer");
+        computer.setSerialNumber("SerialN1");
+        computer.setPrice(1500);
+        computer.setStockBalance(15);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/v1/desktop-pc/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(computer))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.manufacturer")
+                        .value("Manufacturer"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.price").value(1500))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.formFactor").value("DESKTOP"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
