@@ -4,7 +4,6 @@ import com.maruchek.smallshop.AbstractTest;
 import com.maruchek.smallshop.api.request.HardDriveRequest;
 import com.maruchek.smallshop.repository.BaseEntityRepository;
 import com.maruchek.smallshop.repository.HardDriveRepository;
-import com.maruchek.smallshop.repository.MonitorRepository;
 import com.maruchek.smallshop.service.HardDriveService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
