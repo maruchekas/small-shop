@@ -4,7 +4,6 @@ import com.maruchek.smallshop.api.request.MonitorRequest;
 import com.maruchek.smallshop.api.response.MonitorResponse;
 import com.maruchek.smallshop.api.response.MonitorShortResponse;
 import com.maruchek.smallshop.model.Monitor;
-import com.maruchek.smallshop.model.mapper.Mapper;
 import com.maruchek.smallshop.model.mapper.MonitorMapper;
 import com.maruchek.smallshop.repository.MonitorRepository;
 import com.maruchek.smallshop.service.MonitorService;
@@ -19,18 +18,19 @@ import java.util.List;
 public class MonitorServiceImpl implements MonitorService {
 
     private final MonitorRepository monitorRepository;
+    private final MonitorMapper mapper;
 
 
     @Override
     public MonitorResponse getById(long id) {
         Monitor monitor = checkEndGetMonitor(id);
-        return MonitorMapper.toFullResponse(monitor);
+        return mapper.toFullResponse(monitor);
     }
 
     @Override
     public List<MonitorShortResponse> getAll() {
         List<Monitor> monitors = monitorRepository.findAll();
-        return Mapper.convertList(monitors, MonitorMapper::toShortResponse);
+        return mapper.toListShortResponse(monitors);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class MonitorServiceImpl implements MonitorService {
         Monitor monitor = getNewMonitor(request);
 
         monitorRepository.save(monitor);
-        return MonitorMapper.toFullResponse(monitor);
+        return mapper.toFullResponse(monitor);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class MonitorServiceImpl implements MonitorService {
 
         monitorRepository.save(monitor);
 
-        return MonitorMapper.toFullResponse(monitor);
+        return mapper.toFullResponse(monitor);
     }
 
     private Monitor checkEndGetMonitor(long id) {

@@ -5,7 +5,6 @@ import com.maruchek.smallshop.api.response.HardDriveResponse;
 import com.maruchek.smallshop.api.response.HardDriveShortResponse;
 import com.maruchek.smallshop.model.HardDrive;
 import com.maruchek.smallshop.model.mapper.HardDriveMapper;
-import com.maruchek.smallshop.model.mapper.Mapper;
 import com.maruchek.smallshop.repository.HardDriveRepository;
 import com.maruchek.smallshop.service.HardDriveService;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +18,19 @@ import java.util.List;
 public class HardDriveServiceImpl implements HardDriveService {
 
     private final HardDriveRepository hardDriveRepository;
+    private final HardDriveMapper mapper;
 
 
     @Override
     public HardDriveResponse getById(long id) {
         HardDrive hardDrive = checkEndGetHardDrive(id);
-        return HardDriveMapper.toFullResponse(hardDrive);
+        return mapper.toFullResponse(hardDrive);
     }
 
     @Override
     public List<HardDriveShortResponse> getAll() {
         List<HardDrive> hardDrives = hardDriveRepository.findAll();
-        return Mapper.convertList(hardDrives, HardDriveMapper::toShortResponse);
+        return mapper.toListShortResponse(hardDrives);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class HardDriveServiceImpl implements HardDriveService {
         HardDrive hardDrive = getNewHardDrive(request);
 
         hardDriveRepository.save(hardDrive);
-        return HardDriveMapper.toFullResponse(hardDrive);
+        return mapper.toFullResponse(hardDrive);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class HardDriveServiceImpl implements HardDriveService {
 
         hardDriveRepository.save(hardDrive);
 
-        return HardDriveMapper.toFullResponse(hardDrive);
+        return mapper.toFullResponse(hardDrive);
     }
 
     private HardDrive checkEndGetHardDrive(long id) {
@@ -63,6 +63,6 @@ public class HardDriveServiceImpl implements HardDriveService {
     }
 
     private HardDrive getNewHardDrive(HardDriveRequest request) {
-        return HardDriveMapper.toHardDrive(request);
+        return mapper.toHardDrive(request);
     }
 }

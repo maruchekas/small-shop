@@ -5,7 +5,6 @@ import com.maruchek.smallshop.api.response.LaptopResponse;
 import com.maruchek.smallshop.api.response.LaptopShortResponse;
 import com.maruchek.smallshop.model.Laptop;
 import com.maruchek.smallshop.model.mapper.LaptopMapper;
-import com.maruchek.smallshop.model.mapper.Mapper;
 import com.maruchek.smallshop.repository.LaptopRepository;
 import com.maruchek.smallshop.service.LaptopService;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +18,19 @@ import java.util.List;
 public class LaptopServiceImpl implements LaptopService {
 
     private final LaptopRepository laptopRepository;
+    private final LaptopMapper mapper;
 
 
     @Override
     public LaptopResponse getById(long id) {
         Laptop laptop = checkEndGetLaptop(id);
-        return LaptopMapper.toFullResponse(laptop);
+        return mapper.toFullResponse(laptop);
     }
 
     @Override
     public List<LaptopShortResponse> getAll() {
         List<Laptop> laptops = laptopRepository.findAll();
-        return Mapper.convertList(laptops, LaptopMapper::toShortResponse);
+        return mapper.toListShortResponse(laptops);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class LaptopServiceImpl implements LaptopService {
         Laptop laptop = getNewLaptop(request);
 
         laptopRepository.save(laptop);
-        return LaptopMapper.toFullResponse(laptop);
+        return mapper.toFullResponse(laptop);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class LaptopServiceImpl implements LaptopService {
 
         laptopRepository.save(laptop);
 
-        return LaptopMapper.toFullResponse(laptop);
+        return mapper.toFullResponse(laptop);
     }
 
     private Laptop checkEndGetLaptop(long id) {
@@ -63,6 +63,6 @@ public class LaptopServiceImpl implements LaptopService {
 
     private Laptop getNewLaptop(LaptopRequest request) {
 
-        return LaptopMapper.toLaptop(request);
+        return mapper.toLaptop(request);
     }
 }

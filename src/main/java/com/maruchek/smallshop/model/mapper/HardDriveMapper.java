@@ -1,38 +1,25 @@
 package com.maruchek.smallshop.model.mapper;
 
 import com.maruchek.smallshop.api.request.HardDriveRequest;
+import com.maruchek.smallshop.api.request.MonitorRequest;
 import com.maruchek.smallshop.api.response.HardDriveResponse;
 import com.maruchek.smallshop.api.response.HardDriveShortResponse;
+import com.maruchek.smallshop.api.response.MonitorResponse;
+import com.maruchek.smallshop.api.response.MonitorShortResponse;
 import com.maruchek.smallshop.model.HardDrive;
-import lombok.RequiredArgsConstructor;
+import com.maruchek.smallshop.model.Monitor;
+import org.mapstruct.Mapper;
 
-@RequiredArgsConstructor
-public class HardDriveMapper {
+import java.util.List;
 
-    public static HardDriveShortResponse toShortResponse(HardDrive hardDrive) {
-        return new HardDriveShortResponse().setCapacity(hardDrive.getCapacity())
-                .setManufacturer(hardDrive.getManufacturer())
-                .setPrice(hardDrive.getPrice());
-    }
+@Mapper(componentModel = "spring")
+public interface HardDriveMapper {
 
-    public static HardDriveResponse toFullResponse(HardDrive hardDrive) {
-        return new HardDriveResponse()
-                .setId(hardDrive.getId())
-                .setSerialNumber(hardDrive.getSerialNumber())
-                .setManufacturer(hardDrive.getManufacturer())
-                .setPrice(hardDrive.getPrice())
-                .setCapacity(hardDrive.getCapacity())
-                .setStockBalance(hardDrive.getStockBalance());
-    }
+    HardDriveShortResponse toShortResponse(HardDrive hardDrive);
 
-    public static HardDrive toHardDrive(HardDriveRequest request) {
-        HardDrive hardDrive = new HardDrive();
-        hardDrive.setSerialNumber(request.getSerialNumber());
-        hardDrive.setManufacturer(request.getManufacturer());
-        hardDrive.setCapacity(request.getCapacity());
-        hardDrive.setPrice(request.getPrice());
-        hardDrive.setStockBalance(request.getStockBalance());
+    HardDriveResponse toFullResponse(HardDrive hardDrive);
 
-        return hardDrive;
-    }
+    HardDrive toHardDrive(HardDriveRequest request);
+
+    List<HardDriveShortResponse> toListShortResponse(List<HardDrive> hardDrives);
 }

@@ -4,33 +4,18 @@ import com.maruchek.smallshop.api.request.MonitorRequest;
 import com.maruchek.smallshop.api.response.MonitorResponse;
 import com.maruchek.smallshop.api.response.MonitorShortResponse;
 import com.maruchek.smallshop.model.Monitor;
-import lombok.RequiredArgsConstructor;
+import org.mapstruct.Mapper;
 
-@RequiredArgsConstructor
-public class MonitorMapper {
+import java.util.List;
 
-    public static MonitorShortResponse toShortResponse(Monitor monitor) {
-        return new MonitorShortResponse().setScreenSize(monitor.getScreenSize())
-                .setManufacturer(monitor.getManufacturer())
-                .setPrice(monitor.getPrice());
-    }
+@Mapper(componentModel = "spring")
+public interface MonitorMapper {
 
-    public static MonitorResponse toFullResponse(Monitor monitor) {
-        return new MonitorResponse()
-                .setId(monitor.getId())
-                .setSerialNumber(monitor.getSerialNumber())
-                .setManufacturer(monitor.getManufacturer())
-                .setPrice(monitor.getPrice())
-                .setScreenSize(monitor.getScreenSize())
-                .setStockBalance(monitor.getStockBalance());
-    }
+    MonitorShortResponse toShortResponse(Monitor monitor);
 
-    public static Monitor toMonitor(MonitorRequest request) {
-        Monitor monitor = new Monitor();
-        monitor.setSerialNumber(request.getSerialNumber());
-        monitor.setManufacturer(request.getManufacturer());
-        monitor.setScreenSize(request.getScreenSize());
-        monitor.setPrice(request.getPrice());
-        return monitor;
-    }
+    MonitorResponse toFullResponse(Monitor monitor);
+
+    Monitor toMonitor(MonitorRequest request);
+
+    List<MonitorShortResponse> toListShortResponse(List<Monitor> monitors);
 }
