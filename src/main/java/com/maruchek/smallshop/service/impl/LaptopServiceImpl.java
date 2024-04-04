@@ -20,7 +20,6 @@ public class LaptopServiceImpl implements LaptopService {
     private final LaptopRepository laptopRepository;
     private final LaptopMapper mapper;
 
-
     @Override
     public LaptopResponse getById(long id) {
         Laptop laptop = checkEndGetLaptop(id);
